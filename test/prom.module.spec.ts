@@ -28,7 +28,8 @@ describe('PromController', () => {
 
     const register = module.get<any, Registry>(Registry);
 
-    assert.strictEqual('', register.metrics());
+    const actual = await register.metrics();
+    assert.strictEqual(actual, '\n');
   });
 
   it('collection default is true', async () => {
@@ -38,7 +39,7 @@ describe('PromController', () => {
 
     const register = module.get<any, Registry>(Registry);
 
-    assert.strictEqual(register.metrics() !== '', true);
+    assert.strictEqual((await register.metrics()) !== '', true);
   });
 
   it('default labels', async () => {
@@ -73,7 +74,7 @@ describe('PromController', () => {
 test_count{field1="value1",field2="value2",env="testing"} 1`;
 
     assert.strictEqual(
-      register.getSingleMetricAsString('test_count'),
+      await register.getSingleMetricAsString('test_count'),
       expectValue,
     );
   });
@@ -104,7 +105,7 @@ test_count{field1="value1",field2="value2",env="testing"} 1`;
 test_count{field1="value1",field2="value2"} 1`;
 
     assert.strictEqual(
-      register.getSingleMetricAsString('test_count'),
+      await register.getSingleMetricAsString('test_count'),
       expectValue,
     );
   });
@@ -135,7 +136,7 @@ test_count{field1="value1",field2="value2"} 1`;
 test_gauge{field1="value1",field2="value2"} 10`;
 
     assert.strictEqual(
-      register.getSingleMetricAsString('test_gauge'),
+      await register.getSingleMetricAsString('test_gauge'),
       expectValue,
     );
   });
